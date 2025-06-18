@@ -38,7 +38,7 @@ app.use(async (req, res, next) => {
 });
 
 // Routes
-app.get('/api/health', async (req, res) => {
+app.get('/health', async (req, res) => {
   try {
     const dbStatus = mongoose.connection.readyState;
     const status = ['disconnected', 'connected', 'connecting', 'disconnecting'];
@@ -62,9 +62,9 @@ app.get('/api/health', async (req, res) => {
   }
 });
 
-app.post('/api/kirim-data', kirimData);
-app.get('/api/logs', getLogs);
-app.get('/api/logs/:txHash', getLogByHash);
+app.post('/kirim-data', kirimData);
+app.get('/logs', getLogs);
+app.get('/logs/:txHash', getLogByHash);
 
 // 404
 app.use((req, res) => {
