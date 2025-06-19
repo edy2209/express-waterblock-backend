@@ -74,9 +74,9 @@ app.use((req, res) => {
 module.exports = serverless(app); // Export untuk Vercel
 
 // Tambahan untuk bisa jalan lokal juga
-if (require.main === module) {
-  const PORT = process.env.PORT || 3001;
-  app.listen(PORT, () => {
-    console.log(`🚀 Server running locally at http://localhost:${PORT}`);
-  });
-}
+// if (require.main === module) {
+//   const PORT = process.env.PORT || 3001;
+//   app.listen(PORT, () => {
+//     console.log(`🚀 Server running locally at http://localhost:${PORT}`);
+//   });
+// }
