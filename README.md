@@ -1,23 +1,24 @@
------
+
 
 # express-waterblock-backend
 
-Aplikasi backend untuk manajemen data waterblock, dibangun menggunakan Express.js. Aplikasi ini menyediakan API untuk mengelola informasi tentang waterblock, seperti jenis, harga, stok, dan lain-lain.
+Aplikasi backend untuk manajemen data waterblock, dibangun menggunakan Express.js. Aplikasi ini menyediakan API untuk mengelola informasi tentang waterblock, seperti jenis, harga, dan stok, dengan data yang disimpan di **blockchain Ethereum** melalui **smart contract Solidity** pada **jaringan Sepolia**.
 
 ## Fitur
 
   * **API RESTful:** Menyediakan endpoint API untuk operasi CRUD (Create, Read, Update, Delete) pada data waterblock.
-  * **Integrasi Database:** Terhubung dengan database untuk penyimpanan data yang persisten. (Informasi database spesifik akan ditambahkan di sini).
+  * **Interaksi Blockchain:** Berinteraksi langsung dengan smart contract Solidity untuk menyimpan dan mengambil data waterblock secara **terdesentralisasi** dan **transparan**.
   * **Autentikasi & Otorisasi:** (Jika ada, tambahkan detail tentang metode autentikasi dan otorisasi yang digunakan, contoh: JWT).
-  * **Validasi Data:** Memastikan integritas data melalui validasi input.
-  * **Error Handling:** Penanganan error yang robust untuk memberikan respons yang informatif.
+  * **Validasi Data:** Memastikan integritas data melalui validasi input sebelum interaksi dengan smart contract.
+  * **Error Handling:** Penanganan error yang robust untuk memberikan respons yang informatif, termasuk error dari interaksi blockchain.
 
 ## Teknologi
 
   * **Node.js:** Lingkungan runtime JavaScript.
   * **Express.js:** Framework aplikasi web minimalis dan fleksibel untuk Node.js.
-  * **Mongoose (atau ORM/ODM lain yang digunakan):** (Jika digunakan, sebutkan dan berikan deskripsi singkat).
-  * **MongoDB (atau database lain yang digunakan):** (Sebutkan database yang digunakan).
+  * **Web3.js (atau Ethers.js):** Library JavaScript untuk berinteraksi dengan Ethereum blockchain.
+  * **Solidity:** Bahasa pemrograman untuk menulis smart contract di Ethereum.
+  * **Jaringan Sepolia:** Jaringan testnet Ethereum yang digunakan untuk pengembangan dan pengujian smart contract.
   * **dotenv:** Untuk mengelola variabel lingkungan.
   * **nodemon:** (Jika digunakan untuk pengembangan).
 
@@ -31,7 +32,8 @@ Pastikan Anda telah menginstal yang berikut di sistem Anda:
 
   * [Node.js](https://nodejs.org/en/download/) (disarankan versi LTS)
   * [npm](https://www.npmjs.com/get-npm) (biasanya terinstal bersama Node.js)
-  * (Sebutkan prasyarat lain jika ada, contoh: MongoDB, Git)
+  * **MetaMask atau dompet Ethereum lain:** Diperlukan untuk interaksi dengan jaringan Sepolia. Pastikan Anda memiliki ETH testnet di jaringan Sepolia.
+  * **Truffle/Hardhat:** (Jika digunakan untuk pengembangan smart contract, tambahkan di sini).
 
 ### Instalasi
 
@@ -61,11 +63,15 @@ Pastikan Anda telah menginstal yang berikut di sistem Anda:
 
     ```env
     PORT=3000
-    MONGODB_URI=mongodb://localhost:27017/waterblock_db
+    SEPOLIA_RPC_URL=https://sepolia.infura.io/v3/YOUR_INFURA_PROJECT_ID
+    PRIVATE_KEY=YOUR_ETHEREUM_PRIVATE_KEY_FOR_DEPLOYER_ACCOUNT
+    CONTRACT_ADDRESS=YOUR_DEPLOYED_SMART_CONTRACT_ADDRESS_ON_SEPOLIA
     # Tambahkan variabel lain yang diperlukan, contoh: JWT_SECRET=your_secret_key
     ```
 
-    *Ganti nilai `MONGODB_URI` dengan string koneksi database Anda yang sebenarnya.*
+    *Ganti `YOUR_INFURA_PROJECT_ID` dengan ID proyek Infura Anda (atau penyedia RPC lain).*
+    *Ganti `YOUR_ETHEREUM_PRIVATE_KEY_FOR_DEPLOYER_ACCOUNT` dengan kunci privat akun Ethereum yang akan digunakan untuk mengirim transaksi (untuk pengembangan/pengujian).*
+    *Ganti `YOUR_DEPLOYED_SMART_CONTRACT_ADDRESS_ON_SEPOLIA` dengan alamat smart contract waterblock Anda yang sudah di-deploy di jaringan Sepolia.*
 
 ### Menjalankan Aplikasi
 
@@ -89,11 +95,11 @@ Pastikan Anda telah menginstal yang berikut di sistem Anda:
 
 Berikut adalah beberapa contoh endpoint API yang mungkin tersedia:
 
-  * `GET /api/waterblocks`: Mendapatkan semua data waterblock.
-  * `GET /api/waterblocks/:id`: Mendapatkan data waterblock berdasarkan ID.
-  * `POST /api/waterblocks`: Menambahkan data waterblock baru.
-  * `PUT /api/waterblocks/:id`: Memperbarui data waterblock berdasarkan ID.
-  * `DELETE /api/waterblocks/:id`: Menghapus data waterblock berdasarkan ID.
+  * `GET /api/waterblocks`: Mendapatkan semua data waterblock dari smart contract.
+  * `GET /api/waterblocks/:id`: Mendapatkan data waterblock berdasarkan ID dari smart contract.
+  * `POST /api/waterblocks`: Menambahkan data waterblock baru ke smart contract (membutuhkan transaksi).
+  * `PUT /api/waterblocks/:id`: Memperbarui data waterblock berdasarkan ID di smart contract (membutuhkan transaksi).
+  * `DELETE /api/waterblocks/:id`: Menghapus data waterblock berdasarkan ID dari smart contract (membutuhkan transaksi).
 
 (Detail lengkap mengenai setiap endpoint, parameter, dan respons akan ditambahkan di sini, atau Anda dapat merujuk pada dokumentasi API terpisah jika ada.)
 
@@ -102,9 +108,10 @@ Berikut adalah beberapa contoh endpoint API yang mungkin tersedia:
 ```
 .
 ├── controllers/       # Logika bisnis untuk setiap endpoint
-├── models/            # Definisi skema dan model database
+├── contracts/         # File smart contract Solidity (.sol)
+├── scripts/           # Skrip untuk deploy/interaksi smart contract (jika ada)
 ├── routes/            # Definisi rute API
-├── config/            # Konfigurasi aplikasi (contoh: koneksi database)
+├── config/            # Konfigurasi aplikasi (contoh: koneksi Web3, alamat kontrak)
 ├── middleware/        # Middleware Express.js (contoh: autentikasi, error handling)
 ├── .env               # Variabel lingkungan
 ├── .gitignore         # File yang diabaikan oleh Git
